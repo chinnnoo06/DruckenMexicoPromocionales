@@ -1,0 +1,8 @@
+# Ignorar la carpeta DB
+DB/
+
+# Ignorar notas
+Notas/
+
+# Ignorar el archivo start-proyect.bat
+start-proyect.bat
