@@ -3,12 +3,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FaBars } from "react-icons/fa";
 
 import DruckenLogo from "@/assets/logodrucken.webp";
 import { useHeaderFooter } from "@/hooks/useHeaderFooter";
 import { useLogout } from "@/hooks/useLogout";
 import { SocialLinks } from "../SocialLinks";
+import { HamburgerButton } from "./HamburgerButton";
 import { MobileMenu } from "./MobileMenu";
 import { getNavItems, isLinkActive } from "@/utils/navigation";
 
@@ -92,15 +92,7 @@ export const Header = ({ isAdmin = false }: THeaderProps) => {
             <SocialLinks />
           </div>
 
-          <button
-            type="button"
-            className="nav-responsive flex lg:hidden items-center text-[#9F531B] cursor-pointer hover:text-[#9F531B]"
-            onClick={toggleMenu}
-            aria-label="Abrir menú de navegación"
-            aria-expanded={menuVisible}
-          >
-            <FaBars className="h-[1.45rem] w-[1.45rem]" aria-hidden="true" />
-          </button>
+          <HamburgerButton open={menuVisible} toggleMenu={toggleMenu} />
         </header>
       </div>
 
@@ -109,7 +101,7 @@ export const Header = ({ isAdmin = false }: THeaderProps) => {
         activeSectionId={activeSectionId}
         onSectionSelect={onSectionSelect}
         menuVisible={menuVisible}
-        onToggleMenu={toggleMenu}
+        scrolled={scrolled}
       />
     </>
   );

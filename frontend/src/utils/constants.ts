@@ -26,7 +26,7 @@ export const SITE = {
     "Artículos promocionales y regalos corporativos en México. Especialistas en serigrafía, bordado, sublimado, grabado láser y publicidad para tu marca desde 2016.",
   shortDescription:
     "Artículos promocionales y regalos de empresa personalizados con tu marca. Serigrafía, bordado, sublimado, grabado láser y más.",
-  ogImage: "/og-image.jpeg",
+  ogImage: "/og-image.jpg",
   ogImageType: "image/jpeg",
   ogImageWidth: 1200,
   ogImageHeight: 630,

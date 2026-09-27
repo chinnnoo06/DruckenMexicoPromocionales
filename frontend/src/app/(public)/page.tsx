@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Hero } from "@/components/home/Hero";
 import heroBg from "@/assets/image-background.webp";
 import { getCarouselProductsService } from "@/services/server/catalog.service";
+import { getTotalProductsService } from "@/services/server/product.service";
 import { HomeProductsCarousel } from "@/components/home/HomeProductsCarousel";
 import { About } from "@/components/home/about/About";
 import { OurServices } from "@/components/home/ourServices/OurServices";
@@ -10,7 +11,11 @@ import { Contact } from "@/components/home/contact/Contact";
 import { ScrollToHash } from "@/components/ui/ScrollToHash";
 
 export default async function HomePage() {
-  const carouselProducts = await getCarouselProductsService()
+  // El total solo alimenta el sello del Hero: si falla, el inicio sigue cargando
+  const [carouselProducts, totalProducts] = await Promise.all([
+    getCarouselProductsService(),
+    getTotalProductsService().catch(() => null),
+  ])
 
   return (
     <>
@@ -26,10 +31,10 @@ export default async function HomePage() {
           className="-z-10 object-cover"
         />
 
-        <Hero />
+        <Hero totalProducts={totalProducts} />
       </section>
 
-      <section id="carrusel" className='px-4 py-10 lg:py-20'>
+      <section id="carrusel" className='py-10 lg:py-20'>
         <HomeProductsCarousel carouselProducts={carouselProducts} />
       </section>
 

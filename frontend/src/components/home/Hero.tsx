@@ -8,7 +8,16 @@ import { primaryButton, secondaryButton } from "@/utils/styles/button";
 import Image from "next/image";
 import { SocialLinks } from "../ui/SocialLinks";
 
-export const Hero = () => {
+export type THeroProps = {
+    /** Total de artículos en catálogo; si la API falla se omite la cifra. */
+    totalProducts?: number | null;
+};
+
+/** Redondea hacia abajo a la centena: 1496 → "1,400". */
+const formatProductCount = (count: number) =>
+    (Math.floor(count / 100) * 100).toLocaleString("es-MX");
+
+export const Hero = ({ totalProducts = null }: THeroProps) => {
     return (
         <div className='flex flex-col md:flex-row items-center gap-8 lg:gap-10 w-full min-h-auto lg:min-h-[clamp(640px,100dvh,800px)] mx-auto max-w-[1600px] px-4 lg:px-8 pt-30 pb-10 lg:pt-20 lg:pb-0'>
             <motion.div  {...slideInBottom} className='w-full lg:w-[55%] flex flex-col items-start gap-4'>
@@ -83,6 +92,16 @@ export const Hero = () => {
                         />
                     </div>
 
+                    {totalProducts && (
+                        <p className='absolute z-20 left-0 bottom-0 flex items-baseline gap-1.5'>
+                            <span className='text-2xl lg:text-3xl font-semibold tracking-tight text-[#9F531B] leading-none'>
+                                +{formatProductCount(totalProducts)}
+                            </span>
+                            <span className='text-[10px] sm:text-[11px] font-semibold tracking-[0.18em] uppercase text-[#7C3E13]'>
+                                artículos
+                            </span>
+                        </p>
+                    )}
 
                 </div>
             </motion.div>

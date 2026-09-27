@@ -2,16 +2,16 @@
 
 import { useEffect } from "react";
 
-/** Evita que la página de atrás haga scroll mientras hay un modal abierto. */
 export const useLockBodyScroll = (locked: boolean) => {
   useEffect(() => {
     if (!locked) return;
 
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    const html = document.documentElement;
+    const previous = html.style.overflow;
+    html.style.overflow = "hidden";
 
     return () => {
-      document.body.style.overflow = previous;
+      html.style.overflow = previous;
     };
   }, [locked]);
 };
