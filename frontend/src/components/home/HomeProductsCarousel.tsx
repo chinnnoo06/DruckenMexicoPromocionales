@@ -5,6 +5,7 @@ import { FaAngleLeft, FaAngleRight } from 'react-icons/fa6';
 import { TProduct } from '@/schemas/product/product.schemas';
 import { slideInBottomInView } from '@/utils/motion';
 import { secondaryButton, thirdButton } from '@/utils/styles/button';
+import Image from 'next/image';
 import Link from 'next/link';
 import { GlobalImage } from "@/utils/constants";
 import { useCarousel } from "@/hooks/useCarousel";
@@ -54,13 +55,12 @@ export const HomeProductsCarousel = ({ carouselProducts }: {carouselProducts: TP
                 </span>
 
                 <div className='w-full aspect-3/4 relative overflow-hidden rounded-lg group-hover:bg-black/50'>
-                  <img
+                  <Image
                     src={product.colors.length > 1 ? `${GlobalImage.url}/${product.generalImage}` : `${GlobalImage.url}/${product.colors[0].image}`}
                     alt={product.name}
-                    loading="lazy"
-                    width={600}
-                    height={800}
-                    className="absolute w-full h-full object-cover object-center group-hover:opacity-90 transition-opacity duration-200"
+                    fill
+                    sizes="(max-width: 640px) 160px, (max-width: 768px) 180px, (max-width: 1024px) 200px, 220px"
+                    className="object-cover object-center group-hover:opacity-90 transition-opacity duration-200"
                   />
                   <Link href={`/producto/${product._id}`} className={thirdButton}>
                     Ver Ahora

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { TProduct } from "@/schemas/product/product.schemas";
 import { GlobalImage } from "@/utils/constants";
 
@@ -11,15 +12,13 @@ export const ImgProduct = ({ product, selectedColor }: TImgProductProps) => {
 
   return (
     <div className="w-full md:w-2/5 bg-white rounded-lg shadow-md flex items-center justify-center">
-      <div className="w-full max-w-md h-90 sm:h-100 md:h-125 aspect-square">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+      <div className="relative w-full max-w-md h-90 sm:h-100 md:h-125 aspect-square">
+        <Image
           src={`${GlobalImage.url}/${image}`}
           alt={product.name}
-          loading="lazy"
-          width={500}
-          height={500}
-          className="w-full h-full object-contain"
+          fill
+          sizes="(max-width: 768px) 100vw, 40vw"
+          className="object-contain"
         />
       </div>
     </div>

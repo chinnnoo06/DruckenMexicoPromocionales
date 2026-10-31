@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { FaCircleExclamation } from "react-icons/fa6";
 
@@ -41,14 +42,12 @@ export const MapCatalog = ({ products, category, currentPage, isAdmin = false }:
           </span>
 
           <div className="w-full aspect-3/4 relative overflow-hidden rounded-md">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <Image
               src={product.colors.length > 1 ? `${GlobalImage.url}/${product.generalImage}` : `${GlobalImage.url}/${product.colors[0].image}`}
               alt={product.name}
-              loading="lazy"
-              width={600}
-              height={800}
-              className="w-full h-full object-cover group-hover:opacity-80 transition-opacity duration-200"
+              fill
+              sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
+              className="object-cover group-hover:opacity-80 transition-opacity duration-200"
             />
             <Link
               href={`${isAdmin ? "/admin" : ""}/producto/${product._id}`}

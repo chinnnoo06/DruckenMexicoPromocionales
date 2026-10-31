@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { FaTrash } from "react-icons/fa6";
 
 import { QuantityButtons } from "@/components/order/QuantityButtons";
@@ -29,15 +30,13 @@ export const OrderCart = ({ group }: TOrderCartProps) => {
             key={item.ProductColor}
             className="flex flex-col sm:flex-row gap-6 items-stretch"
           >
-            <div className="w-full sm:w-30 h-40 sm:h-40 rounded-lg flex items-center justify-center mt-2">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+            <div className="relative w-full sm:w-30 h-40 sm:h-40 rounded-lg mt-2">
+              <Image
                 src={`${GlobalImage.url}/${item.ProductImage}`}
                 alt={item.ProductName}
-                loading="lazy"
-                width={300}
-                height={400}
-                className="w-full h-full object-contain"
+                fill
+                sizes="120px"
+                className="object-contain"
               />
             </div>
 

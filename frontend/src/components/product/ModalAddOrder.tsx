@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
@@ -57,14 +58,12 @@ export const ModalAddOrder = ({ isOpen, onClose, order }: TModalAddOrderProps) =
           <div className="flex flex-col md:flex-row gap-6 items-center justify-center mb-4">
             <div className="w-4/5 md:w-1/2 flex justify-center">
               <div className="relative w-full max-w-md h-48 bg-white rounded-xl shadow-sm border border-[#9F531B] overflow-hidden group">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <Image
                   src={`${GlobalImage.url}/${order.ProductImage}`}
                   alt={order.ProductName}
-                  loading="lazy"
-                  width={400}
-                  height={300}
-                  className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
+                  fill
+                  sizes="(max-width: 768px) 80vw, 50vw"
+                  className="object-contain transition-transform duration-300 group-hover:scale-105"
                 />
               </div>
             </div>

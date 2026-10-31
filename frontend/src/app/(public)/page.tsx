@@ -11,7 +11,6 @@ import { Contact } from "@/components/home/contact/Contact";
 import { ScrollToHash } from "@/components/ui/ScrollToHash";
 
 export default async function HomePage() {
-  // El total solo alimenta el sello del Hero: si falla, el inicio sigue cargando
   const [carouselProducts, totalProducts] = await Promise.all([
     getCarouselProductsService(),
     getTotalProductsService().catch(() => null),

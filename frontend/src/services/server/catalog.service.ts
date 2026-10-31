@@ -9,7 +9,6 @@ export const getCarouselProductsService = async (): Promise<TProduct[]> => {
     headers: {
       Origin: process.env.DOMAIN as string,
     },
-    // Mismo tag que el catálogo: el carrusel muestra productos, así que caduca con ellos
     next: { revalidate: 3600, tags: ["catalog"] },
   });
 
