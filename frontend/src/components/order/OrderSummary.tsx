@@ -2,8 +2,11 @@
 
 import Link from "next/link";
 import { FaArrowLeft, FaWhatsapp } from "react-icons/fa6";
+import { toast } from "react-toastify";
 
-import { TOrderGroup, useOrderStore } from "@/store/orderStore";
+import { OrderSchema } from "@/schemas/order/order.schemas";
+import { TOrderGroup } from "@/schemas/order/order.schemas";
+import { groupOrderItems, useOrderStore } from "@/store/orderStore";
 import { GlobalImage, WHATSAPP_NUMBER } from "@/utils/constants";
 import { primaryButton, secondaryButton } from "@/utils/styles/button";
 
@@ -42,11 +45,18 @@ export const OrderSummary = ({ groups }: { groups: TOrderGroup[] }) => {
   const isBelowMinimum = groups.some((group) => group.totalQuantity < group.ProductMinQuantity);
 
   const sendOrder = () => {
-    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(buildMessage(groups))}`;
+    const result = OrderSchema.safeParse(useOrderStore.getState().items);
+
+    if (!result.success) {
+      toast.error("Tu pedido contiene datos inválidos. Por favor vacíalo y vuelve a agregar los productos.");
+      return;
+    }
+
+    const validatedGroups = groupOrderItems(result.data);
+    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(buildMessage(validatedGroups))}`;
 
     window.open(url, "_blank", "noopener,noreferrer");
-    
-    clearOrder()
+    clearOrder();
   };
 
   return (

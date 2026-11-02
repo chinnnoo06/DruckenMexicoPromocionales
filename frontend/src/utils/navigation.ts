@@ -3,7 +3,6 @@ import type { TSectionId } from "@/hooks/useHeaderFooter";
 export type TNavItem =
   | { kind: "link"; text: string; to: string }
   | { kind: "section"; text: string; sectionId: TSectionId }
-  /** No navega: dispara la action de cierre de sesión. */
   | { kind: "logout"; text: string };
 
 export const HOME_NAV_ITEMS: TNavItem[] = [

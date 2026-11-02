@@ -1,5 +1,5 @@
 import { OrderCart } from "@/components/order/OrderCart";
-import { TOrderGroup } from "@/store/orderStore";
+import { TOrderGroup } from "@/schemas/order/order.schemas";
 
 export type TMapOrderProps = {
   groups: TOrderGroup[];

@@ -4,7 +4,8 @@ import Image from "next/image";
 import { FaTrash } from "react-icons/fa6";
 
 import { QuantityButtons } from "@/components/order/QuantityButtons";
-import { TOrderGroup, useOrderStore } from "@/store/orderStore";
+import { TOrderGroup } from "@/schemas/order/order.schemas";
+import { useOrderStore } from "@/store/orderStore";
 import { GlobalImage } from "@/utils/constants";
 
 export type TOrderCartProps = {

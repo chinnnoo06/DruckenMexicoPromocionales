@@ -1,16 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-import { TOrderItem } from "@/schemas/order/order.schemas";
-
-export type TOrderGroup = {
-  ProductId: string;
-  ProductName: string;
-  ProductKey: string;
-  ProductMinQuantity: number;
-  items: TOrderItem[];
-  totalQuantity: number;
-};
+import { TOrderGroup, TOrderItem } from "@/schemas/order/order.schemas";
 
 type TOrderState = {
   items: TOrderItem[];
