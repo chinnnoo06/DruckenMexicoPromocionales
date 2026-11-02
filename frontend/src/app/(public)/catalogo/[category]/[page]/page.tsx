@@ -32,6 +32,7 @@ export async function generateMetadata({ params }: PageProps<"/catalogo/[categor
       "regalos corporativos",
       "promocionales con logo",
     ],
+    robots: page !== "1" ? { index: false, follow: true } : { index: true, follow: true },
     alternates: { canonical },
     openGraph: {
       type: "website",
