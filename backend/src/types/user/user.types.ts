@@ -5,8 +5,6 @@ export type TUser = {
     password: string
 };
 
-export type TUserWithID = TUser & { _id: Types.ObjectId }
-
 // Lo que el middleware auth() deja colgado en req.user
 export type TUserPayload = {
     id: Types.ObjectId
