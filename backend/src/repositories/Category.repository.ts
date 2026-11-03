@@ -2,9 +2,9 @@ import { Category } from "../models/Category";
 import { TAddCategoryDto } from "../types/category/category.dtos";
 import { TCategoryWithProductCount } from "../types/category/category.types";
 
-export const categoryRepository = {
+export class CategoryRepository {
 
-    async getCategories() {
+    static async getCategories() {
         return Category.aggregate<TCategoryWithProductCount>([
             {
                 $lookup: {
@@ -26,17 +26,17 @@ export const categoryRepository = {
                 }
             }
         ]);
-    },
+    }
 
-    async addCategory(data: TAddCategoryDto) {
+    static async addCategory(data: TAddCategoryDto) {
         return Category.create(data)
-    },
+    }
 
-    async findById(id: string) {
+    static async findById(id: string) {
         return Category.findById(id);
-    },
+    }
 
-    async findByName(name: string) {
+    static async findByName(name: string) {
         return Category.findOne({ name }).collation({ locale: "es", strength: 1 });
     }
 }

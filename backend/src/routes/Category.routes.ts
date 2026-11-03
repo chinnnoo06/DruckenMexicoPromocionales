@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { param } from "express-validator";
-import { CategoryController } from "../controllers/category.controller";
+import { CategoryController } from "../controllers/Category.controller";
 import { auth } from "../middlewares/auth";
 import { validateCategoryExists, validateCategoryInput } from "../middlewares/category";
 import { handleInputErrors } from "../middlewares/handleInputErrors";

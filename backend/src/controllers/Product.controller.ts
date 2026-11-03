@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import { productService } from "../services/product.service";
+import { ProductService } from "../services/Product.service";
 import { TAddProductDto, TGetProductsQueryParams, TUpdateProductDto } from "../types/product/product.dtos";
 import { TMongoIdParams } from "../types/common/common.dtos";
 import { TMulterFiles } from "../types/multer/multer.types";
@@ -17,8 +17,8 @@ export class ProductController {
 
         try {
             const data = search
-                ? await productService.find(category, page, search)
-                : await productService.getAll(category, page)
+                ? await ProductService.find(category, page, search)
+                : await ProductService.getAll(category, page)
 
             const payload = {
                 status: "success",
@@ -57,7 +57,7 @@ export class ProductController {
 
     static getCarouselProducts = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const products = await productService.getCarousel()
+            const products = await ProductService.getCarousel()
 
             return res.status(200).send({
                 status: "success",
@@ -71,7 +71,7 @@ export class ProductController {
 
     static deleteProduct = async (req: TRequestWithProduct<TMongoIdParams>, res: Response, next: NextFunction) => {
         try {
-            await productService.remove(req.product)
+            await ProductService.remove(req.product)
 
             return res.status(200).send({
                 status: "success",
@@ -88,7 +88,7 @@ export class ProductController {
         const files = req.files as TMulterFiles | undefined;
 
         try {
-            const product = await productService.add(params, files)
+            const product = await ProductService.add(params, files)
 
             return res.status(200).json({
                 status: "success",
@@ -107,7 +107,7 @@ export class ProductController {
         const files = req.files as TMulterFiles | undefined;
 
         try {
-            const product = await productService.update(req.product, params, files)
+            const product = await ProductService.update(req.product, params, files)
 
             return res.status(200).json({
                 status: "success",
@@ -122,7 +122,7 @@ export class ProductController {
 
     static getTotalCountProducts = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const count = await productService.getTotalCount()
+            const count = await ProductService.getTotalCount()
 
             return res.status(200).json({
                 status: "success",

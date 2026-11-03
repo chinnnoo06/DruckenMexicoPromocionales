@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { body } from "express-validator";
-import { productRepository } from "../repositories/product.repository";
+import { ProductRepository } from "../repositories/Product.repository";
 import { HttpError } from "../utils/error";
 import { TProductDocument } from "../types/product/product.types";
 import { TMongoIdParams } from "../types/common/common.dtos";
@@ -34,7 +34,7 @@ export const validateProductExists = async (req: Request<TMongoIdParams>, res: R
     const { id } = req.params
 
     try {
-        const product = await productRepository.findById(id)
+        const product = await ProductRepository.findById(id)
 
         if (!product) {
             throw new HttpError(404, "No existe el producto")

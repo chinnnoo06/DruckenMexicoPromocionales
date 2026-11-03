@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { body } from "express-validator";
-import { categoryRepository } from "../repositories/category.repository";
+import { CategoryRepository } from "../repositories/Category.repository";
 import { HttpError } from "../utils/error";
 import { TCategoryDocument } from "../types/category/category.types";
 import { TMongoIdParams } from "../types/common/common.dtos";
@@ -23,7 +23,7 @@ export const validateCategoryExists = async (req: Request<TMongoIdParams>, res: 
     const { id } = req.params
 
     try {
-        const category = await categoryRepository.findById(id)
+        const category = await CategoryRepository.findById(id)
 
         if (!category) {
             throw new HttpError(404, "No existe la categoría")

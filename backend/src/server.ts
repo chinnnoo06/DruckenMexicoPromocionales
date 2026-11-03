@@ -13,9 +13,9 @@ import { errorHandler } from './middlewares/error'
 
 import { startRandomSpanJob } from './jobs/randomSpan.job'
 
-import productRouter from './routes/product.routes'
-import authRouter from './routes/auth.routes'
-import categoryRouter from './routes/category.routes'
+import productRouter from './routes/Product.routes'
+import authRouter from './routes/Auth.routes'
+import categoryRouter from './routes/Category.routes'
 
 connection();
 

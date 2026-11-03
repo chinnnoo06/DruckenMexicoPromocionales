@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import { authService } from "../services/auth.service";
+import { AuthService } from "../services/Auth.service";
 import { TLoginDto, TRegisterDto } from "../types/auth/auth.dtos";
 
 export class AuthController {
@@ -12,7 +12,7 @@ export class AuthController {
         const params = req.body;
 
         try {
-            await authService.register(params)
+            await AuthService.register(params)
 
             return res.status(200).json({
                 status: "success",
@@ -28,7 +28,7 @@ export class AuthController {
         const params = req.body;
 
         try {
-            const sessionInfo = await authService.login(params)
+            const sessionInfo = await AuthService.login(params)
 
             return res.status(200).json({
                 status: "success",

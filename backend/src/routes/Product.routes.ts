@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { param, query } from "express-validator";
-import { ProductController } from "../controllers/product.controller";
+import { ProductController } from "../controllers/Product.controller";
 import { auth } from "../middlewares/auth";
 import { convertNewImagesToWebP } from "../middlewares/convertNewImagesToWebP";
 import { handleInputErrors } from "../middlewares/handleInputErrors";

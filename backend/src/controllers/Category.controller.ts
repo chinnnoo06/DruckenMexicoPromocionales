@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import { categoryService } from "../services/category.service";
+import { CategoryService } from "../services/Category.service";
 import { TAddCategoryDto, TUpdateCategoryDto } from "../types/category/category.dtos";
 import { TMongoIdParams } from "../types/common/common.dtos";
 import { TRequestWithCategory } from "../types/express/category";
@@ -8,7 +8,7 @@ export class CategoryController {
 
     static getCategories = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const categories = await categoryService.getAll()
+            const categories = await CategoryService.getAll()
 
             return res.status(200).json({
                 status: "success",
@@ -25,7 +25,7 @@ export class CategoryController {
         const params = req.body;
 
         try {
-            const category = await categoryService.add(params)
+            const category = await CategoryService.add(params)
 
             console.log("Categoria registrada con exito");
             return res.status(200).json({
@@ -43,7 +43,7 @@ export class CategoryController {
         const params = req.body;
 
         try {
-            const category = await categoryService.update(req.category, params)
+            const category = await CategoryService.update(req.category, params)
 
             console.log("Categoria y productos actualizados con éxito");
             return res.status(200).json({
@@ -60,7 +60,7 @@ export class CategoryController {
 
     static remove = async (req: TRequestWithCategory<TMongoIdParams>, res: Response, next: NextFunction) => {
         try {
-            await categoryService.remove(req.category)
+            await CategoryService.remove(req.category)
 
             console.log("Categoria y productos eliminados correctamente");
             return res.status(200).json({

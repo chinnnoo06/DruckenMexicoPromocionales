@@ -2,8 +2,8 @@ import { QueryFilter } from "mongoose";
 import { HttpError } from "../utils/error";
 import { randomSpanOption } from "../utils/spanOptions";
 import { deleteProductImages, deleteUploadedFiles } from "../utils/deleteFiles";
-import { productRepository } from "../repositories/product.repository";
-import { categoryRepository } from "../repositories/category.repository";
+import { ProductRepository } from "../repositories/Product.repository";
+import { CategoryRepository } from "../repositories/Category.repository";
 import { TAddProductDto, TUpdateProductDto } from "../types/product/product.dtos";
 import {
     TColor,
@@ -40,7 +40,7 @@ function shuffleWithSeed<T>(array: T[], seed: number) {
 const resolveCategoryName = async (category: string) => {
     if (category === "todos") return "";
 
-    const categoryExist = await categoryRepository.findByName(category)
+    const categoryExist = await CategoryRepository.findByName(category)
 
     if (!categoryExist) {
         throw new HttpError(404, "No existe esa categoría");
@@ -73,14 +73,14 @@ const applyUploadedFiles = (
     return { colors, generalImage }
 }
 
-export const productService = {
+export class ProductService {
 
-    async getAll(category: string, page: number): Promise<TPaginatedProducts> {
+    static async getAll(category: string, page: number): Promise<TPaginatedProducts> {
         const categoryName = await resolveCategoryName(category)
 
         const filter: QueryFilter<TProduct> = category === "todos" ? {} : { category: categoryName };
 
-        const allProducts = await productRepository.findAll(filter)
+        const allProducts = await ProductRepository.findAll(filter)
 
         if (!allProducts || allProducts.length === 0) {
             throw new HttpError(404, "No hay productos");
@@ -101,9 +101,9 @@ export const productService = {
             itemsPerPage: ITEMS_PER_PAGE,
             pages: Math.ceil(allProducts.length / ITEMS_PER_PAGE)
         }
-    },
+    }
 
-    async find(category: string, page: number, search: string): Promise<TPaginatedProducts> {
+    static async find(category: string, page: number, search: string): Promise<TPaginatedProducts> {
         const categoryName = await resolveCategoryName(category)
 
         const filter: QueryFilter<TProduct> = {
@@ -116,7 +116,7 @@ export const productService = {
             })
         };
 
-        let allProducts = await productRepository.findAll(filter)
+        let allProducts = await ProductRepository.findAll(filter)
 
         if (!allProducts || allProducts.length === 0) {
             throw new HttpError(404, "No hay productos");
@@ -151,29 +151,29 @@ export const productService = {
             itemsPerPage: ITEMS_PER_PAGE,
             pages: Math.ceil(totalDocs / ITEMS_PER_PAGE)
         }
-    },
+    }
 
-    async getCarousel() {
-        const products = await productRepository.getCarouselProducts()
+    static async getCarousel() {
+        const products = await ProductRepository.getCarouselProducts()
 
         if (!products || products.length === 0) {
             throw new HttpError(404, "No hay productos");
         }
 
         return products
-    },
+    }
 
-    async remove(product: TProductDocument) {
+    static async remove(product: TProductDocument) {
         await product.deleteOne()
 
         deleteProductImages(product)
-    },
+    }
 
-    async add(data: TAddProductDto, files?: TMulterFiles) {
+    static async add(data: TAddProductDto, files?: TMulterFiles) {
         try {
             const { colors, generalImage } = applyUploadedFiles(data, files)
 
-            const product = await productRepository.addProduct({
+            const product = await ProductRepository.addProduct({
                 ...data,
                 colors,
                 generalImage,
@@ -185,9 +185,9 @@ export const productService = {
             deleteUploadedFiles(files)
             throw error
         }
-    },
+    }
 
-    async update(product: TProductDocument, data: TUpdateProductDto, files?: TMulterFiles) {
+    static async update(product: TProductDocument, data: TUpdateProductDto, files?: TMulterFiles) {
         try {
             // Esta lógica elimina TODAS las imágenes del producto anterior.
             deleteProductImages(product)
@@ -208,9 +208,9 @@ export const productService = {
             deleteUploadedFiles(files)
             throw error
         }
-    },
+    }
 
-    async getTotalCount() {
-        return await productRepository.getTotalCount()
+    static async getTotalCount() {
+        return await ProductRepository.getTotalCount()
     }
 }

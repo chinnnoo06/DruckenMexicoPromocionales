@@ -2,42 +2,42 @@ import { QueryFilter } from "mongoose";
 import { Product } from "../models/Product";
 import { TProduct, TProductWithID } from "../types/product/product.types";
 
-export const productRepository = {
+export class ProductRepository {
 
-    async findAll(filter: QueryFilter<TProduct>) {
+    static async findAll(filter: QueryFilter<TProduct>) {
         return Product.find(filter).sort({ _id: 1 });
-    },
+    }
 
-    async findById(id: string) {
+    static async findById(id: string) {
         return Product.findById(id);
-    },
+    }
 
-    async getCarouselProducts() {
+    static async getCarouselProducts() {
         return Product.aggregate<TProductWithID>([
             { $sample: { size: 15 } }
         ]);
-    },
+    }
 
-    async addProduct(data: TProduct) {
+    static async addProduct(data: TProduct) {
         return Product.create(data)
-    },
+    }
 
-    async getTotalCount() {
+    static async getTotalCount() {
         return Product.countDocuments()
-    },
+    }
 
-    async updateSpan(id: TProductWithID["_id"], span: string) {
+    static async updateSpan(id: TProductWithID["_id"], span: string) {
         return Product.findByIdAndUpdate(id, { span });
-    },
+    }
 
-    async updateMany(oldCategoryName: string, newCategoryName: string) {
+    static async updateMany(oldCategoryName: string, newCategoryName: string) {
         return Product.updateMany(
             { category: oldCategoryName },
             { $set: { category: newCategoryName } }
         );
-    },
+    }
 
-    async deleteMany(categoryName: string) {
+    static async deleteMany(categoryName: string) {
         return Product.deleteMany({ category: categoryName });
     }
 }

@@ -1,12 +1,12 @@
-import { productRepository } from "../repositories/product.repository";
+import { ProductRepository } from "../repositories/Product.repository";
 import { randomSpanOption } from "../utils/spanOptions";
 
 const randomSpan = async () => {
     try {
-        const products = await productRepository.findAll({});
+        const products = await ProductRepository.findAll({});
 
         for (let product of products) {
-            await productRepository.updateSpan(product._id, randomSpanOption());
+            await ProductRepository.updateSpan(product._id, randomSpanOption());
         }
 
         console.log("Span actualizado");
