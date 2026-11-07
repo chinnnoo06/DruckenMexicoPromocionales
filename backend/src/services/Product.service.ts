@@ -86,8 +86,7 @@ export class ProductService {
             throw new HttpError(404, "No hay productos");
         }
 
-        // Seed basado en la hora actual (hora Unix / 3600)
-        const seed = Math.floor(Date.now() / (1000 * 60 * 60));
+        const seed = Math.floor(Date.now() / (1000 * 60 * 60 * 24));
 
         const shuffled = shuffleWithSeed(allProducts, seed);
 
