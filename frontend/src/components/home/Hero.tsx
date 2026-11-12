@@ -41,7 +41,7 @@ export const Hero = ({ totalProducts = null }: THeroProps) => {
                         <span className='block' style={{ animation: 'drk-rise 0.9s cubic-bezier(.2,.7,.2,1) 0.41s both' }}>
                             en{' '}
                             <span className='relative text-[#9F531B] italic'>
-                                México.
+                                México
                             </span>
                         </span>
                     </span>
