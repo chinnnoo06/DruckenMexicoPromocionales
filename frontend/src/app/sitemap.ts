@@ -16,14 +16,23 @@ const STATIC_ROUTES: MetadataRoute.Sitemap = [
   { url: `${SITE.url}/privacidad`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.3 },
 ];
 
-/** Obtiene solo la primera página de una categoría para recopilar sus productos. */
-const collectFirstPage = async (category: string) => {
+/** Recorre todas las páginas de una categoría y devuelve todos sus productos. */
+const collectAllProducts = async (category: string) => {
+  const products: TProduct[] = [];
+
   try {
     const first = await getCatalogProductsService(category, "1");
-    return first.products;
+    products.push(...first.products);
+
+    for (let page = 2; page <= first.pages; page++) {
+      const next = await getCatalogProductsService(category, String(page));
+      products.push(...next.products);
+    }
   } catch {
-    return [];
+    // Categoría sin productos
   }
+
+  return products;
 };
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -31,7 +40,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const productsById = new Map<string, TProduct>();
 
-  const todosProducts = await collectFirstPage("todos");
+  // Recorre todas las páginas de "todos" para descubrir todos los productos
+  const todosProducts = await collectAllProducts("todos");
   todosProducts.forEach((product) => productsById.set(product._id, product));
 
   // Una URL por categoría (solo página 1)
@@ -41,12 +51,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: "weekly",
     priority: 0.8,
   }));
-
-  // Productos individuales — recorremos todas las categorías para descubrirlos todos
-  for (const category of categories) {
-    const products = await collectFirstPage(slugify(category.name));
-    products.forEach((product) => productsById.set(product._id, product));
-  }
 
   const productRoutes: MetadataRoute.Sitemap = [...productsById.keys()].map((id) => ({
     url: `${SITE.url}/producto/${id}`,
