@@ -16,57 +16,36 @@ const STATIC_ROUTES: MetadataRoute.Sitemap = [
   { url: `${SITE.url}/privacidad`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.3 },
 ];
 
-/** Recorre todas las páginas de una categoría y devuelve sus productos y el total de páginas. */
-const collectCategory = async (category: string) => {
-  const products: TProduct[] = [];
-
+/** Obtiene solo la primera página de una categoría para recopilar sus productos. */
+const collectFirstPage = async (category: string) => {
   try {
     const first = await getCatalogProductsService(category, "1");
-    products.push(...first.products);
-
-    for (let page = 2; page <= first.pages; page++) {
-      const next = await getCatalogProductsService(category, String(page));
-      products.push(...next.products);
-    }
-
-    return { products, pages: first.pages };
+    return first.products;
   } catch {
-    // Categoría sin productos: la API responde 404 y el servicio lanza
-    return { products, pages: 0 };
+    return [];
   }
 };
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const categories = await getCategoriesService().catch(() => []);
 
-  const categoryRoutes: MetadataRoute.Sitemap = [];
   const productsById = new Map<string, TProduct>();
 
-  const todos = await collectCategory("todos");
-  todos.products.forEach((product) => productsById.set(product._id, product));
+  const todosProducts = await collectFirstPage("todos");
+  todosProducts.forEach((product) => productsById.set(product._id, product));
 
-  // Páginas 2..N del catálogo general (la 1 ya está en las rutas estáticas)
-  for (let page = 2; page <= todos.pages; page++) {
-    categoryRoutes.push({
-      url: `${SITE.url}/catalogo/todos/${page}`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.6,
-    });
-  }
+  // Una URL por categoría (solo página 1)
+  const categoryRoutes: MetadataRoute.Sitemap = categories.map((category) => ({
+    url: `${SITE.url}/catalogo/${slugify(category.name)}/1`,
+    lastModified: new Date(),
+    changeFrequency: "weekly",
+    priority: 0.8,
+  }));
 
+  // Productos individuales — recorremos todas las categorías para descubrirlos todos
   for (const category of categories) {
-    const slug = slugify(category.name);
-    const { pages } = await collectCategory(slug);
-
-    for (let page = 1; page <= pages; page++) {
-      categoryRoutes.push({
-        url: `${SITE.url}/catalogo/${slug}/${page}`,
-        lastModified: new Date(),
-        changeFrequency: "weekly",
-        priority: page === 1 ? 0.8 : 0.6,
-      });
-    }
+    const products = await collectFirstPage(slugify(category.name));
+    products.forEach((product) => productsById.set(product._id, product));
   }
 
   const productRoutes: MetadataRoute.Sitemap = [...productsById.keys()].map((id) => ({
