@@ -13,8 +13,8 @@ declare global {
     }
 }
 
-export function auth() {
-    return async function (req: Request, res: Response, next: NextFunction) {
+export const auth = () => async (req: Request, res: Response, next: NextFunction) => {
+    try {
         let token: string | null = null;
 
         if (req.cookies?.token) {
@@ -29,23 +29,24 @@ export function auth() {
         }
 
         if (!token) {
-            return next(new HttpError(403, "No hay token"));
+            throw new HttpError(401, "No hay token");
         }
 
-        try {
-            const decode = jwt.verify(token, SECRET_KEY) as TTokenPayload;
+        const decode = jwt.verify(token, SECRET_KEY) as TTokenPayload;
 
-            const user = await AuthRepository.findById(decode.id);
+        const user = await AuthRepository.findById(decode.id);
 
-            if (!user) {
-                throw new HttpError(401, "Token inválido");
-            }
-
-            req.user = { id: user._id };
-
-            next();
-        } catch (error) {
-            next(error instanceof HttpError ? error : new HttpError(401, "Token inválido"));
+        if (!user) {
+            throw new HttpError(401, "Token inválido");
         }
-    };
-}
+
+        req.user = { id: user._id };
+
+        next();
+    } catch (error) {
+        if (error instanceof jwt.JsonWebTokenError) {
+            return next(new HttpError(401, "Token inválido"));
+        }
+        next(error);
+    }
+};
